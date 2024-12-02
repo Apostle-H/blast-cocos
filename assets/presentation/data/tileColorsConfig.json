@@ -1,0 +1,24 @@
+﻿{
+  "spritePaths": [
+    {
+      "code": 1,
+      "path": "sprites/tiles/blue/spriteFrame"
+    },
+    {
+      "code": 2,
+      "path": "sprites/tiles/green/spriteFrame"
+    },
+    {
+      "code": 3,
+      "path": "sprites/tiles/purple/spriteFrame"
+    },
+    {
+      "code": 4,
+      "path": "sprites/tiles/red/spriteFrame"
+    },
+    {
+      "code": 5,
+      "path": "sprites/tiles/yellow/spriteFrame"
+    }
+  ]
+}
