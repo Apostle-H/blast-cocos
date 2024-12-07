@@ -29,6 +29,7 @@ import {ViewFiller} from "db://assets/source/grid/view/viewFiller";
 import {ViewShuffler} from "db://assets/source/grid/view/viewShuffler";
 import {Score} from "db://assets/source/scoring/score";
 import {ClearScorer} from "db://assets/source/grid/clearScorer";
+import {Turns} from "db://assets/source/turns/turns";
 
 const {ccclass, property} = _decorator;
 
@@ -38,6 +39,9 @@ export const GAME_READY_ET = new EventTarget();
 export class Bootstrapper extends Component {
     @property({ type: JsonAsset })
     private tileSpritesJson: JsonAsset;
+    
+    @property
+    private turnsCount: number = 1;
     
     @property
     private gridSize: Vec2;
@@ -74,11 +78,11 @@ export class Bootstrapper extends Component {
         Promise.all([
             TILES_COLORS_CONFIG.load(this.tileSpritesJson)
         ]).then(() => {
-            GAME_READY_ET.emit(0);
-            
             this.init();
             this.bind();
             this.launch();
+            
+            GAME_READY_ET.emit(0);
             
         }).catch((error) => {
             console.error(error);
@@ -94,7 +98,8 @@ export class Bootstrapper extends Component {
     private init() {
         this._stateMachine = new CoreStateMachine(CoreState.IDLE);
         
-        const score: Score = new Score();
+        const score = new Score();
+        const turns = new Turns(this.turnsCount); 
         
         const tilesPool = new Pool(
             () => new Tile(), (tile) => tile.paint(randomInteger(1, this.gridTilesColorVariantsCount)), () => {}
@@ -130,7 +135,7 @@ export class Bootstrapper extends Component {
         this._gridEventsInterpreter = new GridEventsInterpreter(viewClearer, viewFiller, viewShuffler, gridViewUpdater);
         
         this._stateResolvers.push(...[
-            new IdleStateResolver(this._stateMachine),
+            new IdleStateResolver(this._stateMachine, turns),
             new ClearStateResolver(this._stateMachine, tileSelector, clearer, GRIDVIEW_CLEARED_ET),
             new FillStateResolver(this._stateMachine, filler, GRIDVIEW_FILLED_ET),
             new ShuffleStateResolver(this._stateMachine, shuffler, clearer, GRIDVIEW_SHUFFLED_ET, this.maxShufflesPerIterationCount)
