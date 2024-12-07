@@ -1,18 +1,31 @@
-﻿import {Component, Sprite, Vec2, _decorator, EventTarget, Node} from "cc";
-import {ITileView} from "db://assets/source/grid/view/iTileView";
+﻿import {Component, Sprite, Vec2, Vec3, _decorator, EventTarget, Node, tween} from "cc";
 import {TILES_COLORS_CONFIG} from "db://assets/source/grid/view/data/tilesColorsConfig";
+import {Tile} from "db://assets/source/grid/tile";
 const {ccclass, property} = _decorator;
 
 export const TILE_CLICK_ET = new EventTarget();
 
 @ccclass('tile-view')
-export class TileView extends Component implements ITileView {
+export class TileView extends Component {
     @property({ type: Sprite })
     private sprite: Sprite;
+    @property
+    private scaleTime: number = 0.2;
     
-    private _position: Vec2;
+    private _tile: Tile;
+    
+    private _clearTween = tween().to(this.scaleTime, { scale: new Vec3(0, 0, 0) })
+    
+    public get tile() {
+        return this._tile;
+    }
+    
+    protected onLoad() {
+        this._clearTween.target(this.sprite.node);
+    }
     
     protected onEnable() {
+        this.sprite.node.scale = Vec3.ONE;
         this.node.on(Node.EventType.TOUCH_END, this.click, this);
     }
     
@@ -20,19 +33,20 @@ export class TileView extends Component implements ITileView {
         this.node.off(Node.EventType.TOUCH_END, this.click, this);
     }
 
-    public move(position: Vec2) {
-        this._position = position;
-    }
-    
-    public paint(color: number) {
-        this.sprite.spriteFrame = TILES_COLORS_CONFIG.get(color);
-    }
-    
     public clear() {
+        return new Promise<void>((resolve) => {
+            this._clearTween.clone().call(resolve).start(0);
+            this._tile = null;
+        })
+    }
+    
+    public setTile(tile: Tile) {
+        this._tile = tile;
         
+        this.sprite.spriteFrame = TILES_COLORS_CONFIG.get(this._tile.color);
     }
     
     private click() {
-        TILE_CLICK_ET.emit(true.toString(), this._position);
+        TILE_CLICK_ET.emit(0, this);
     }
 }

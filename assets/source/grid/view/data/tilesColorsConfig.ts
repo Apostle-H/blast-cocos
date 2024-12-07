@@ -1,6 +1,4 @@
-﻿import {JsonAsset, SpriteFrame, EventTarget, resources} from "cc";
-
-export const TILES_COLORS_LOADED_ET = new EventTarget();
+﻿import {JsonAsset, SpriteFrame, resources} from "cc";
 
 export class TilesColorsConfig {
     private _spites: Map<number, SpriteFrame> = new Map();
@@ -20,12 +18,8 @@ export class TilesColorsConfig {
                 })
             }))
         } 
-        Promise.all(loadPromises).then(() => {
-            TILES_COLORS_LOADED_ET.emit(true.toString())
-        }).catch((err) => {
-            console.error(err);
-            TILES_COLORS_LOADED_ET.emit(false.toString())
-        })
+        
+        return Promise.all(loadPromises);
     }
     
     public get(color: number) {
