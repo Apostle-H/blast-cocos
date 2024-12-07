@@ -1,4 +1,4 @@
-﻿import {Component, Sprite, Vec2, Vec3, _decorator, EventTarget, Node, tween} from "cc";
+﻿import {Component, Sprite, Vec3, _decorator, EventTarget, Node, tween} from "cc";
 import {TILES_COLORS_CONFIG} from "db://assets/source/grid/view/data/tilesColorsConfig";
 import {Tile} from "db://assets/source/grid/tile";
 const {ccclass, property} = _decorator;
@@ -14,7 +14,7 @@ export class TileView extends Component {
     
     private _tile: Tile;
     
-    private _clearTween = tween().to(this.scaleTime, { scale: new Vec3(0, 0, 0) })
+    private _clearTween = tween(this.node).to(this.scaleTime, { scale: Vec3.ZERO });
     
     public get tile() {
         return this._tile;
@@ -35,7 +35,7 @@ export class TileView extends Component {
 
     public clear() {
         return new Promise<void>((resolve) => {
-            this._clearTween.clone().call(resolve).start(0);
+            this._clearTween.clone().call(() => resolve()).start(0);
             this._tile = null;
         })
     }

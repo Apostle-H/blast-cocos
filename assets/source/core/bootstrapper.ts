@@ -27,6 +27,8 @@ import {TileView} from "db://assets/source/grid/view/tileView";
 import {ViewClearer} from "db://assets/source/grid/view/viewClearer";
 import {ViewFiller} from "db://assets/source/grid/view/viewFiller";
 import {ViewShuffler} from "db://assets/source/grid/view/viewShuffler";
+import {Score} from "db://assets/source/scoring/score";
+import {ClearScorer} from "db://assets/source/grid/clearScorer";
 
 const {ccclass, property} = _decorator;
 
@@ -62,6 +64,8 @@ export class Bootstrapper extends Component {
     private _stateMachine: IStateMachine<CoreState>;
     private _stateResolvers: StateResolver<CoreState>[] = [];
     
+    private _clearScorer: ClearScorer; 
+    
     private _tileClicksInterpreter: TileClickInterpreter;
     private _gridEventsInterpreter: GridEventsInterpreter;
     
@@ -90,6 +94,8 @@ export class Bootstrapper extends Component {
     private init() {
         this._stateMachine = new CoreStateMachine(CoreState.IDLE);
         
+        const score: Score = new Score();
+        
         const tilesPool = new Pool(
             () => new Tile(), (tile) => tile.paint(randomInteger(1, this.gridTilesColorVariantsCount)), () => {}
         );
@@ -98,6 +104,8 @@ export class Bootstrapper extends Component {
         const clearer = new Clearer(grid, tilesPool);
         const filler = new Filler(grid, tilesPool);
         const shuffler = new Shuffler(grid);
+        
+        this._clearScorer = new ClearScorer(score);
         
         const tileSlotViewsPool: Pool<TileSlotView> = new Pool(
             () => instantiate(this.tileSlotViewPrefab).getComponent(TileSlotView),
@@ -131,12 +139,14 @@ export class Bootstrapper extends Component {
     
     private bind() {
         this._stateResolvers.forEach(stateResolver => stateResolver.bind())
+        this._clearScorer.bind();
         this._tileClicksInterpreter.bind();
         this._gridEventsInterpreter.bind();
     }
     
     private expose() {
         this._stateResolvers.forEach(stateResolver => stateResolver.expose());
+        this._clearScorer.expose();
         this._tileClicksInterpreter.expose();
         this._gridEventsInterpreter.expose();
     }
