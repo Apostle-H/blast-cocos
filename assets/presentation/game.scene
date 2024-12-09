@@ -2674,11 +2674,12 @@
       "__uuid__": "7e8c59d6-ed0e-4ea4-91dc-9027c00ba364",
       "__expectedType__": "cc.JsonAsset"
     },
-    "turnsCount": 5,
+    "turnsCount": 8,
+    "scoreTarget": 100,
     "gridSize": {
       "__type__": "cc.Vec2",
-      "x": 3,
-      "y": 3
+      "x": 4,
+      "y": 4
     },
     "gridMinBlastSize": 2,
     "gridTilesColorVariantsCount": 5,
@@ -2697,6 +2698,9 @@
     },
     "fallShiftTime": 0.5,
     "shuffleShiftTime": 0.5,
+    "scoreView": {
+      "__id__": 31
+    },
     "winLoseScreensSwitcher": {
       "__id__": 4
     },

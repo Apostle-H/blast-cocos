@@ -4,10 +4,19 @@
 export const SCORE_UP_ET: EventTarget = new EventTarget();
 
 export class Score {
-    private _score: number = 0;
+    private _value: number = 0;
+    private readonly _target: number;
     
-    public get score() {
-        return this._score;
+    public constructor(target: number) {
+        this._target = target;
+    }
+    
+    public get value() {
+        return this._value;
+    }
+    
+    public get target() {
+        return this._target;
     }
     
     public scoreUp(value: number) {
@@ -15,8 +24,8 @@ export class Score {
             return;
         }
         
-        this._score += value;
+        this._value += value;
         
-        SCORE_UP_ET.emit(0, this.score, value);
+        SCORE_UP_ET.emit(0, this.value, this.target, value);
     }
 }

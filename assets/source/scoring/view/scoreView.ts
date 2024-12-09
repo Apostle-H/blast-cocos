@@ -16,6 +16,8 @@ export class ScoreView extends Component {
     
     private _scoredTween: Tween<Node>;
     
+    private _initialized: boolean = false;
+    
     protected onLoad() {
         this._label = this.node.getComponent(Label);
 
@@ -32,8 +34,16 @@ export class ScoreView extends Component {
         SCORE_UP_ET.off(0, this.scoreUp, this);
     }
     
-    private scoreUp(score: number, value: number) {
-        this._label.string = score.toString();
+    public init(value: number, target: number) {
+        if (this._initialized) {
+            return;
+        }
+        
+        this.scoreUp(value, target);
+    }
+    
+    private scoreUp(value: number, target: number, delta: number = 0) {
+        this._label.string = `${value}/${target}`;
         
         this._scoredTween.start(0);
     }

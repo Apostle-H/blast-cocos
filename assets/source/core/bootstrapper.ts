@@ -33,6 +33,7 @@ import {Turns} from "db://assets/source/turns/turns";
 import {LoseStateResolver} from "db://assets/source/core/statemachine/stateResolvers/loseStateResolver";
 import {WinLoseScreensSwitcher} from "db://assets/source/winLose/view/winLoseScreensSwitcher";
 import {WinStateResolver} from "db://assets/source/core/statemachine/stateResolvers/winStateResolver";
+import {ScoreView} from "db://assets/source/scoring/view/scoreView";
 
 const {ccclass, property} = _decorator;
 
@@ -45,6 +46,8 @@ export class Bootstrapper extends Component {
     
     @property
     private turnsCount: number = 1;
+    @property
+    private scoreTarget: number = 10;
     
     @property
     private gridSize: Vec2;
@@ -67,6 +70,9 @@ export class Bootstrapper extends Component {
     private fallShiftTime: number = 0.5;
     @property
     private shuffleShiftTime: number = 0.1;
+    
+    @property({ type: ScoreView })
+    private scoreView: ScoreView;
     
     @property({ type: WinLoseScreensSwitcher })
     private winLoseScreensSwitcher: WinLoseScreensSwitcher;
@@ -104,8 +110,10 @@ export class Bootstrapper extends Component {
     private init() {
         this._stateMachine = new CoreStateMachine(CoreState.IDLE);
         
-        const score = new Score();
+        const score = new Score(this.scoreTarget);
         const turns = new Turns(this.turnsCount); 
+        
+        this.scoreView.init(score.value, score.target);
         
         const tilesPool = new Pool(
             () => new Tile(), (tile) => tile.paint(randomInteger(1, this.gridTilesColorVariantsCount)), () => {}
@@ -141,7 +149,7 @@ export class Bootstrapper extends Component {
         this._gridEventsInterpreter = new GridEventsInterpreter(viewClearer, viewFiller, viewShuffler, gridViewUpdater);
         
         this._stateResolvers.push(...[
-            new IdleStateResolver(this._stateMachine, clearer, turns),
+            new IdleStateResolver(this._stateMachine, clearer, score, turns),
             new ClearStateResolver(this._stateMachine, tileSelector, clearer, GRIDVIEW_CLEARED_ET),
             new FillStateResolver(this._stateMachine, filler, GRIDVIEW_FILLED_ET),
             new ShuffleStateResolver(this._stateMachine, shuffler, clearer, GRIDVIEW_SHUFFLED_ET, this.maxShufflesPerIterationCount),
