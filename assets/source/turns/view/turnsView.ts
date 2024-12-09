@@ -16,6 +16,8 @@ export class TurnsView extends Component {
 
     private _downTween: Tween<Node>;
     
+    private _initialized: boolean = false;
+    
     protected onLoad() {
         this._label = this.node.getComponent(Label);
 
@@ -30,6 +32,15 @@ export class TurnsView extends Component {
 
     protected onDisable() {
         TURNS_DOWN_ET.off(0, this.turnsDown, this);
+    }
+    
+    public init(left: number) {
+        if (this._initialized) {
+            return;
+        }
+        
+        this._initialized = true;
+        this.turnsDown(left);
     }
 
     private turnsDown(left: number) {

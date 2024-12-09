@@ -15,7 +15,7 @@ export class Filler {
         this._tilesPool = tilesPool;
     }
     
-    public tryFill() {
+    public fill() {
         const shift = new Map<number, [Tile, number, number][]>
 
         for (let x = 0; x < this._grid.size.x; x++) {

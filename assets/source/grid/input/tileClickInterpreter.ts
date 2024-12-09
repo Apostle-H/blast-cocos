@@ -1,10 +1,10 @@
 ﻿import {TILE_CLICK_ET, TileView} from "db://assets/source/grid/view/tileView";
-import {TileSelector} from "db://assets/source/grid/tileSelector";
+import {TilesSelector} from "db://assets/source/grid/tilesSelector";
 
 export class TileClickInterpreter {
-    private _tileSelector: TileSelector;
+    private _tileSelector: TilesSelector;
     
-    public constructor(tileSelector: TileSelector) {
+    public constructor(tileSelector: TilesSelector) {
         this._tileSelector = tileSelector;
     }
     
@@ -17,6 +17,6 @@ export class TileClickInterpreter {
     }
 
     private interpret(tileView: TileView) {
-        this._tileSelector.selectTile(tileView.tile);
+        this._tileSelector.selectTiles([tileView.tile.position]);
     }
 }

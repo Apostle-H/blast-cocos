@@ -4,12 +4,13 @@ import {CoreState} from "db://assets/source/core/statemachine/coreState";
 import {CORE_STATE_SWITCH_ET} from "db://assets/source/core/statemachine/stateMachine";
 import {Shuffler} from "db://assets/source/grid/shuffler";
 import {Clearer} from "db://assets/source/grid/clearer";
+import {Connected} from "db://assets/source/grid/connected";
 
 export class ShuffleStateResolver extends AStateResolver<CoreState> {
     private readonly _stateMachine: IStateMachine<CoreState>;
 
     private readonly _shuffler: Shuffler;
-    private readonly _clearer: Clearer;
+    private readonly _connected: Connected;
     
     private readonly _toIdleEt: EventTarget;
     
@@ -19,14 +20,14 @@ export class ShuffleStateResolver extends AStateResolver<CoreState> {
     private _awaitedShufflesPerIterationCounter: number;
 
     public constructor(
-        stateMachine: IStateMachine<CoreState>, shuffler: Shuffler, clearer: Clearer, toIdleEt: EventTarget,
+        stateMachine: IStateMachine<CoreState>, shuffler: Shuffler, connected: Connected, toIdleEt: EventTarget,
         maxShufflesPerIterationCount: number
     ) {
         super(CORE_STATE_SWITCH_ET, CoreState.SHUFFLING);
         
         this._stateMachine = stateMachine;
         this._shuffler = shuffler;
-        this._clearer = clearer;
+        this._connected = connected;
         this._toIdleEt = toIdleEt;
         this._maxShufflesPerIterationCount = maxShufflesPerIterationCount
     }
@@ -43,14 +44,14 @@ export class ShuffleStateResolver extends AStateResolver<CoreState> {
     }
 
     private onEnter() {
-        if (this._clearer.hasAnythingToClear()) {
+        if (this._connected.hasAnythingConnected()) {
             this.toIdle();
             return;
         }
         
         this._toIdleEt.on(0, this.shufflingCounter, this);
         
-        for (let i = 0; i < this._maxShufflesPerIterationCount && !this._clearer.hasAnythingToClear(); i++) {
+        for (let i = 0; i < this._maxShufflesPerIterationCount && !this._connected.hasAnythingConnected(); i++) {
             this._shufflesPerIterationCounter++;
             this._shuffler.shuffle();
         }

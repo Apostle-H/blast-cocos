@@ -10,11 +10,10 @@ const {ccclass, property, requireComponent} = _decorator;
 @requireComponent(UITransform)
 @requireComponent(Layout)
 export class GridView extends Component{
-    private transform: UITransform;
-    private layout: Layout;
+    private _transform: UITransform;
+    private _layout: Layout;
     
     private _grid: Grid;
-    private _initialized: boolean = false;
     
     private _tileSlotViewsPool: Pool<TileSlotView>;
     private _tileViewsPool: Pool<TileView>;
@@ -22,13 +21,15 @@ export class GridView extends Component{
     
     private _tileSlotViews: TileSlotView[][] = [];
     
+    private _initialized: boolean = false;
+    
     public get tileSlotViews() {
         return this._tileSlotViews;
     }
     
     protected onLoad() {
-        this.transform = this.node.getComponent(UITransform);
-        this.layout = this.node.getComponent(Layout);
+        this._transform = this.node.getComponent(UITransform);
+        this._layout = this.node.getComponent(Layout);
     }
     
     public init(tileSlotViewsPool: Pool<TileSlotView>, tileViewsPool: Pool<TileView>, tilesSpawnSlot: TileSlotView) {
@@ -43,28 +44,28 @@ export class GridView extends Component{
         }
         this._grid = grid;
         
-        const spacing = new Vec2(this.layout.spacingX * this._grid.size.x, this.layout.spacingY * this._grid.size.y);
+        const spacing = new Vec2(this._layout.spacingX * this._grid.size.x, this._layout.spacingY * this._grid.size.y);
 
         const isXLong = this._grid.size.x > this._grid.size.y;
         const cellSize = Math.floor(isXLong 
-            ? (this.transform.contentSize.x - spacing.x) / this._grid.size.x
-            : (this.transform.contentSize.y - spacing.y) / this._grid.size.y
+            ? (this._transform.contentSize.x - spacing.x) / this._grid.size.x
+            : (this._transform.contentSize.y - spacing.y) / this._grid.size.y
         );
         
         const contentSize = new Vec2(spacing.x + (cellSize * this._grid.size.x), spacing.y + (cellSize * this._grid.size.y));
         const padding = new Vec2(
-            (this.transform.contentSize.x - contentSize.x) / 2, 
-            (this.transform.contentSize.y - contentSize.y) / 2
+            (this._transform.contentSize.x - contentSize.x) / 2, 
+            (this._transform.contentSize.y - contentSize.y) / 2
         );
         
         const cellContentSize = new Size(cellSize, cellSize);
-        this.layout.cellSize = cellContentSize;
+        this._layout.cellSize = cellContentSize;
         this._tilesSpawnSlot.transform.contentSize = cellContentSize;
         
-        this.layout.paddingLeft = padding.x;
-        this.layout.paddingRight = padding.x;
-        this.layout.paddingTop = padding.y;
-        this.layout.paddingBottom = padding.y;
+        this._layout.paddingLeft = padding.x;
+        this._layout.paddingRight = padding.x;
+        this._layout.paddingTop = padding.y;
+        this._layout.paddingBottom = padding.y;
 
         for (const column of this._grid.tiles) {
             this._tileSlotViews.push([])
@@ -73,7 +74,7 @@ export class GridView extends Component{
                 tileView.setTile(tile)
                 
                 const tileSlotView = this._tileSlotViewsPool.get();
-                this.layout.node.addChild(tileSlotView.node);
+                this._layout.node.addChild(tileSlotView.node);
                 tileSlotView.init(tile.position);
                 tileSlotView.setTileView(tileView);
                 

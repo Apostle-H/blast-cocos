@@ -10,7 +10,7 @@ import {Tile} from "db://assets/source/grid/tile";
 import {Filler} from "db://assets/source/grid/filler";
 import {randomInteger} from "db://assets/utils/random";
 import {Shuffler} from "db://assets/source/grid/shuffler";
-import {TileSelector} from "db://assets/source/grid/tileSelector";
+import {TilesSelector} from "db://assets/source/grid/tilesSelector";
 import {GridEventsInterpreter} from "db://assets/source/grid/view/updater/gridEventsInterpreter";
 import {GridViewUpdater} from "db://assets/source/grid/view/updater/gridViewUpdater";
 import {IStateMachine, AStateResolver} from "db://assets/utils/stateMachine";
@@ -34,6 +34,13 @@ import {LoseStateResolver} from "db://assets/source/core/statemachine/stateResol
 import {WinLoseScreensSwitcher} from "db://assets/source/winLose/view/winLoseScreensSwitcher";
 import {WinStateResolver} from "db://assets/source/core/statemachine/stateResolvers/winStateResolver";
 import {ScoreView} from "db://assets/source/scoring/view/scoreView";
+import {Connected} from "db://assets/source/grid/connected";
+import {Selector} from "db://assets/source/grid/selector";
+import {ClearBoostsSelector} from "db://assets/source/grid/boosts/clearBoostsSelector";
+import {IClearBoost} from "db://assets/source/grid/boosts/iClearBoost";
+import {Bomb} from "db://assets/source/grid/boosts/bomb";
+import {ClearBoostsSelectorView} from "db://assets/source/grid/view/boosts/clearBoostsSelectorView";
+import {TurnsView} from "db://assets/source/turns/view/turnsView";
 
 const {ccclass, property} = _decorator;
 
@@ -57,6 +64,8 @@ export class Bootstrapper extends Component {
     private gridTilesColorVariantsCount: number = 5;
     @property
     private maxShufflesPerIterationCount: number = 3;
+    @property
+    private bombBoostRadius: number = 2;
     
     @property({ type: GridView })
     private gridView: GridView;
@@ -71,8 +80,14 @@ export class Bootstrapper extends Component {
     @property
     private shuffleShiftTime: number = 0.1;
     
+    @property({ type: ClearBoostsSelectorView })
+    private clearBoostsSelectorView: ClearBoostsSelectorView;
+    
     @property({ type: ScoreView })
     private scoreView: ScoreView;
+    
+    @property({ type: TurnsView})
+    private turnsView: TurnsView;
     
     @property({ type: WinLoseScreensSwitcher })
     private winLoseScreensSwitcher: WinLoseScreensSwitcher;
@@ -111,18 +126,24 @@ export class Bootstrapper extends Component {
         this._stateMachine = new CoreStateMachine(CoreState.IDLE);
         
         const score = new Score(this.scoreTarget);
-        const turns = new Turns(this.turnsCount); 
-        
         this.scoreView.init(score.value, score.target);
+        
+        const turns = new Turns(this.turnsCount); 
+        this.turnsView.init(turns.left);
         
         const tilesPool = new Pool(
             () => new Tile(), (tile) => tile.paint(randomInteger(1, this.gridTilesColorVariantsCount)), () => {}
         );
         const grid = new Grid(tilesPool, this.gridSize, this.gridMinBlastSize, this.gridTilesColorVariantsCount);
-        const tileSelector = new TileSelector();
+        const tileSelector = new TilesSelector();
+        const selector = new Selector()
+        const connected = new Connected(grid);
         const clearer = new Clearer(grid, tilesPool);
         const filler = new Filler(grid, tilesPool);
         const shuffler = new Shuffler(grid);
+        
+        const clearBoostSelector = new ClearBoostsSelector();
+        const clearBoosts: IClearBoost[] = [new Bomb(grid, this.bombBoostRadius)]
         
         this._clearScorer = new ClearScorer(score);
         
@@ -148,11 +169,14 @@ export class Bootstrapper extends Component {
         const gridViewUpdater = new GridViewUpdater();
         this._gridEventsInterpreter = new GridEventsInterpreter(viewClearer, viewFiller, viewShuffler, gridViewUpdater);
         
+        this.clearBoostsSelectorView.init(clearBoostSelector);
+        this.clearBoostsSelectorView.initBoosts(clearBoosts);
+        
         this._stateResolvers.push(...[
-            new IdleStateResolver(this._stateMachine, clearer, score, turns),
+            new IdleStateResolver(this._stateMachine, tileSelector, selector, connected, clearBoostSelector, score, turns),
             new ClearStateResolver(this._stateMachine, tileSelector, clearer, GRIDVIEW_CLEARED_ET),
             new FillStateResolver(this._stateMachine, filler, GRIDVIEW_FILLED_ET),
-            new ShuffleStateResolver(this._stateMachine, shuffler, clearer, GRIDVIEW_SHUFFLED_ET, this.maxShufflesPerIterationCount),
+            new ShuffleStateResolver(this._stateMachine, shuffler, connected, GRIDVIEW_SHUFFLED_ET, this.maxShufflesPerIterationCount),
             new LoseStateResolver(this.winLoseScreensSwitcher),
             new WinStateResolver(this.winLoseScreensSwitcher)
         ]);

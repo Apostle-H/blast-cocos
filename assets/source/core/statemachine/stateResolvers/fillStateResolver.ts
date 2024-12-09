@@ -33,7 +33,7 @@ export class FillStateResolver extends AStateResolver<CoreState> {
     private onEnter() {
         this._toShuffleEt.once(0, this.toShuffling, this);
         
-        this._filler.tryFill();
+        this._filler.fill();
     }
 
     private onExit() {

@@ -39,6 +39,7 @@ export class ScoreView extends Component {
             return;
         }
         
+        this._initialized = true;
         this.scoreUp(value, target);
     }
     
