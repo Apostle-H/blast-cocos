@@ -13,7 +13,7 @@ export enum StateAction {
     EXIT = 1
 }
 
-export abstract class StateResolver<T extends number> {
+export abstract class AStateResolver<T extends number> {
     private readonly _switchEt: EventTarget;
     private readonly _targetState: T;
     

@@ -1,10 +1,10 @@
 ﻿import {EventTarget} from "cc";
-import {IStateMachine, StateAction, StateResolver} from "db://assets/utils/stateMachine";
+import {IStateMachine, StateAction, AStateResolver} from "db://assets/utils/stateMachine";
 import {CoreState} from "db://assets/source/core/statemachine/coreState";
 import {CORE_STATE_SWITCH_ET} from "db://assets/source/core/statemachine/stateMachine";
 import {Filler} from "db://assets/source/grid/filler";
 
-export class FillStateResolver extends StateResolver<CoreState> {
+export class FillStateResolver extends AStateResolver<CoreState> {
     private readonly _stateMachine: IStateMachine<CoreState>;
 
     private readonly _filler: Filler;

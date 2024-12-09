@@ -13,7 +13,7 @@ import {Shuffler} from "db://assets/source/grid/shuffler";
 import {TileSelector} from "db://assets/source/grid/tileSelector";
 import {GridEventsInterpreter} from "db://assets/source/grid/view/updater/gridEventsInterpreter";
 import {GridViewUpdater} from "db://assets/source/grid/view/updater/gridViewUpdater";
-import {IStateMachine, StateResolver} from "db://assets/utils/stateMachine";
+import {IStateMachine, AStateResolver} from "db://assets/utils/stateMachine";
 import {IdleStateResolver} from "db://assets/source/core/statemachine/stateResolvers/idleStateResolver";
 import {ClearStateResolver} from "db://assets/source/core/statemachine/stateResolvers/clearStateResolver";
 import {FillStateResolver} from "db://assets/source/core/statemachine/stateResolvers/fillStateResolver";
@@ -30,6 +30,9 @@ import {ViewShuffler} from "db://assets/source/grid/view/viewShuffler";
 import {Score} from "db://assets/source/scoring/score";
 import {ClearScorer} from "db://assets/source/grid/clearScorer";
 import {Turns} from "db://assets/source/turns/turns";
+import {LoseStateResolver} from "db://assets/source/core/statemachine/stateResolvers/loseStateResolver";
+import {WinLoseScreensSwitcher} from "db://assets/source/winLose/view/winLoseScreensSwitcher";
+import {WinStateResolver} from "db://assets/source/core/statemachine/stateResolvers/winStateResolver";
 
 const {ccclass, property} = _decorator;
 
@@ -65,8 +68,11 @@ export class Bootstrapper extends Component {
     @property
     private shuffleShiftTime: number = 0.1;
     
+    @property({ type: WinLoseScreensSwitcher })
+    private winLoseScreensSwitcher: WinLoseScreensSwitcher;
+    
     private _stateMachine: IStateMachine<CoreState>;
-    private _stateResolvers: StateResolver<CoreState>[] = [];
+    private _stateResolvers: AStateResolver<CoreState>[] = [];
     
     private _clearScorer: ClearScorer; 
     
@@ -135,10 +141,12 @@ export class Bootstrapper extends Component {
         this._gridEventsInterpreter = new GridEventsInterpreter(viewClearer, viewFiller, viewShuffler, gridViewUpdater);
         
         this._stateResolvers.push(...[
-            new IdleStateResolver(this._stateMachine, turns),
+            new IdleStateResolver(this._stateMachine, clearer, turns),
             new ClearStateResolver(this._stateMachine, tileSelector, clearer, GRIDVIEW_CLEARED_ET),
             new FillStateResolver(this._stateMachine, filler, GRIDVIEW_FILLED_ET),
-            new ShuffleStateResolver(this._stateMachine, shuffler, clearer, GRIDVIEW_SHUFFLED_ET, this.maxShufflesPerIterationCount)
+            new ShuffleStateResolver(this._stateMachine, shuffler, clearer, GRIDVIEW_SHUFFLED_ET, this.maxShufflesPerIterationCount),
+            new LoseStateResolver(this.winLoseScreensSwitcher),
+            new WinStateResolver(this.winLoseScreensSwitcher)
         ]);
     }
     
