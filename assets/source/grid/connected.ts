@@ -2,6 +2,7 @@
 import {Grid} from "db://assets/source/grid/grid";
 import {vec2InBounds} from "db://assets/utils/bounds";
 
+
 export class Connected {
     private readonly _grid: Grid;
 

@@ -47,16 +47,16 @@ export class Grid {
         const neighbourTiles: Tile[] = [];
         
         if (tile.position.x > 0) {
-            neighbourTiles.push(this._tiles[tile.position.x - 1][tile.position.y])
+            neighbourTiles.push(this._tiles[tile.position.x - 1][tile.position.y]);
         }
         if (tile.position.x < this.size.x - 1) {
-            neighbourTiles.push(this._tiles[tile.position.x + 1][tile.position.y])
+            neighbourTiles.push(this._tiles[tile.position.x + 1][tile.position.y]);
         }
         if (tile.position.y > 0) {
-            neighbourTiles.push(this._tiles[tile.position.x][tile.position.y - 1])
+            neighbourTiles.push(this._tiles[tile.position.x][tile.position.y - 1]);
         }
         if (tile.position.y < this.size.y - 1) {
-            neighbourTiles.push(this._tiles[tile.position.x][tile.position.y + 1])
+            neighbourTiles.push(this._tiles[tile.position.x][tile.position.y + 1]);
         }
         
         return neighbourTiles;

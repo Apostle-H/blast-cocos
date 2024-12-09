@@ -1,9 +1,9 @@
-﻿import {Component, _decorator, Button, Label, Sprite, Color} from "cc";
+﻿import {Component, _decorator, Label, Sprite, Color} from "cc";
 const {ccclass, property} = _decorator;
 
 
 @ccclass("boost-view")
-export class BoostView extends Component{
+export class BoostView extends Component {
     @property({ type: Sprite })
     private sprite: Sprite;
     private _label: Label;

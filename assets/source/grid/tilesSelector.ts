@@ -5,7 +5,7 @@ export const TILE_SELECTED_ET = new EventTarget();
 export const TILE_DESELECTED_ET = new EventTarget();
 
 export class TilesSelector {
-    private _positions: Vec2[] = [];
+    private readonly _positions: Vec2[] = [];
     
     public get hasPositionsSelected() {
         return this._positions.length > 0;

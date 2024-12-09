@@ -6,7 +6,6 @@ import {TilesSelector} from "db://assets/source/grid/tilesSelector";
 import {Clearer} from "db://assets/source/grid/clearer";
 
 export class ClearStateResolver extends AStateResolver<CoreState> {
-    
     private readonly _stateMachine: IStateMachine<CoreState>;
     
     private readonly _tileSelector: TilesSelector;

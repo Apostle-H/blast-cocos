@@ -1,4 +1,4 @@
-﻿import {Component, _decorator, Button, Prefab, EventHandler, Layout, instantiate, Vec2, UITransform, Size} from "cc";
+﻿import {Component, _decorator, Button, Prefab, Layout, instantiate, Vec2, UITransform, Size} from "cc";
 import {IClearBoost} from "db://assets/source/grid/boosts/iClearBoost";
 import {BoostView} from "db://assets/source/grid/view/boosts/boostView";
 import {ClearBoostsSelector} from "db://assets/source/grid/boosts/clearBoostsSelector";

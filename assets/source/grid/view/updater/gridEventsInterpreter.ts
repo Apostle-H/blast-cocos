@@ -12,6 +12,7 @@ import {ViewFiller} from "db://assets/source/grid/view/viewFiller";
 import {ViewShuffler} from "db://assets/source/grid/view/viewShuffler";
 import {Tile} from "db://assets/source/grid/tile";
 
+
 export class GridEventsInterpreter {
     private readonly _viewClearer: ViewClearer;
     private readonly _viewFiller: ViewFiller;
@@ -40,7 +41,7 @@ export class GridEventsInterpreter {
     }
     
     private addClearCommand(clearPositions: Vec2[]) {
-        this._gridUpdater.enqueue(new ClearCommand(this._viewClearer, clearPositions))
+        this._gridUpdater.enqueue(new ClearCommand(this._viewClearer, clearPositions));
     }
     
     private addFillCommand(fillShifts: Map<number, [Tile, number, number][]>) {

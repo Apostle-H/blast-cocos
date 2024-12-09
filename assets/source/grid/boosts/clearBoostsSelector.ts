@@ -1,6 +1,7 @@
 ﻿import {EventTarget} from "cc";
 import {IClearBoost} from "db://assets/source/grid/boosts/iClearBoost";
 
+
 export const CLEAR_BOOST_SELECTED_ET = new EventTarget();
 export const CLEAR_BOOST_DESELECTED_ET = new EventTarget()
 

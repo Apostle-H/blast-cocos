@@ -3,6 +3,7 @@ import {CoreState} from "db://assets/source/core/statemachine/coreState";
 import {CORE_STATE_SWITCH_ET} from "db://assets/source/core/statemachine/stateMachine";
 import {WinLoseScreensSwitcher} from "db://assets/source/winLose/view/winLoseScreensSwitcher";
 
+
 export class WinStateResolver extends AStateResolver<CoreState> {
     private readonly _winLoseScreensSwitcher: WinLoseScreensSwitcher;
     

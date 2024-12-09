@@ -1,7 +1,7 @@
 ﻿import {Component, Node, _decorator, Vec2, Vec3, Tween, tween, UITransform} from "cc";
 import {TileView} from "db://assets/source/grid/view/tileView";
 import {convertLocalToOtherLocal} from "db://assets/utils/convertation";
-const {ccclass, property, requireComponent} = _decorator;
+const {ccclass, requireComponent} = _decorator;
 
 @ccclass("tile-slot-view")
 @requireComponent(UITransform)

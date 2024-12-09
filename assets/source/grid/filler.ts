@@ -7,8 +7,8 @@ import {Pool} from "db://assets/utils/pool";
 export const FILL_ET = new EventTarget();
 
 export class Filler {
-    private _grid: Grid;
-    private _tilesPool: Pool<Tile>;
+    private readonly _grid: Grid;
+    private readonly _tilesPool: Pool<Tile>;
     
     public constructor(grid: Grid, tilesPool: Pool<Tile>) {
         this._grid = grid;

@@ -1,5 +1,5 @@
 ﻿import { Vec2 } from "cc";
-import {TileView} from "db://assets/source/grid/view/tileView";
+
 
 export class Tile {
     private _position: Vec2;

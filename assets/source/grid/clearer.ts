@@ -2,7 +2,6 @@
 import {Grid} from "db://assets/source/grid/grid";
 import {Tile} from "db://assets/source/grid/tile";
 import {Pool} from "db://assets/utils/pool";
-import {Connected} from "db://assets/source/grid/connected";
 
 
 export const CLEAR_ET = new EventTarget();

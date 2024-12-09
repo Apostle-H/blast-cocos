@@ -2,10 +2,11 @@
 import {IStateMachine, StateAction} from "db://assets/utils/stateMachine";
 import {CoreState} from "db://assets/source/core/statemachine/coreState";
 
+
 export const CORE_STATE_SWITCH_ET = new EventTarget();
 
 export class CoreStateMachine implements IStateMachine<CoreState> {
-    private _startState: CoreState;
+    private readonly _startState: CoreState;
     
     private _currentState: CoreState = null;
     

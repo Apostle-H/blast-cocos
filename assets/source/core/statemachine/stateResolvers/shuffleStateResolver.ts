@@ -3,8 +3,8 @@ import {IStateMachine, StateAction, AStateResolver} from "db://assets/utils/stat
 import {CoreState} from "db://assets/source/core/statemachine/coreState";
 import {CORE_STATE_SWITCH_ET} from "db://assets/source/core/statemachine/stateMachine";
 import {Shuffler} from "db://assets/source/grid/shuffler";
-import {Clearer} from "db://assets/source/grid/clearer";
 import {Connected} from "db://assets/source/grid/connected";
+
 
 export class ShuffleStateResolver extends AStateResolver<CoreState> {
     private readonly _stateMachine: IStateMachine<CoreState>;

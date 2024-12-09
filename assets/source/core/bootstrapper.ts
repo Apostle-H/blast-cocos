@@ -41,8 +41,8 @@ import {IClearBoost} from "db://assets/source/grid/boosts/iClearBoost";
 import {Bomb} from "db://assets/source/grid/boosts/bomb";
 import {ClearBoostsSelectorView} from "db://assets/source/grid/view/boosts/clearBoostsSelectorView";
 import {TurnsView} from "db://assets/source/turns/view/turnsView";
-
 const {ccclass, property} = _decorator;
+
 
 export const GAME_READY_ET = new EventTarget();
 
@@ -136,14 +136,14 @@ export class Bootstrapper extends Component {
         );
         const grid = new Grid(tilesPool, this.gridSize, this.gridMinBlastSize, this.gridTilesColorVariantsCount);
         const tileSelector = new TilesSelector();
-        const selector = new Selector()
+        const selector = new Selector();
         const connected = new Connected(grid);
         const clearer = new Clearer(grid, tilesPool);
         const filler = new Filler(grid, tilesPool);
         const shuffler = new Shuffler(grid);
         
         const clearBoostSelector = new ClearBoostsSelector();
-        const clearBoosts: IClearBoost[] = [new Bomb(grid, this.bombBoostRadius)]
+        const clearBoosts: IClearBoost[] = [new Bomb(grid, this.bombBoostRadius)];
         
         this._clearScorer = new ClearScorer(score);
         
@@ -183,7 +183,7 @@ export class Bootstrapper extends Component {
     }
     
     private bind() {
-        this._stateResolvers.forEach(stateResolver => stateResolver.bind())
+        this._stateResolvers.forEach(stateResolver => stateResolver.bind());
         this._clearScorer.bind();
         this._tileClicksInterpreter.bind();
         this._gridEventsInterpreter.bind();

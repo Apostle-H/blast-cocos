@@ -3,6 +3,7 @@ import {TILES_COLORS_CONFIG} from "db://assets/source/grid/view/data/tilesColors
 import {Tile} from "db://assets/source/grid/tile";
 const {ccclass, property} = _decorator;
 
+
 export const TILE_CLICK_ET = new EventTarget();
 
 @ccclass('tile-view')

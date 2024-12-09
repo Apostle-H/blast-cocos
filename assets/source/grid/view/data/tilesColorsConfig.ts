@@ -1,5 +1,6 @@
 ﻿import {JsonAsset, SpriteFrame, resources} from "cc";
 
+
 export class TilesColorsConfig {
     private _spites: Map<number, SpriteFrame> = new Map();
     

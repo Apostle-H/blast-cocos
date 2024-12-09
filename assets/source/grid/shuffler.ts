@@ -21,7 +21,7 @@ export class Shuffler {
         for (let x = 0; x < this._grid.size.x; x++) {
             oldPositions.push([])
             for (let y = 0; y < this._grid.size.y; y++) {
-                oldPositions[x].push(randomTiles[x * this._grid.size.y + y].position)
+                oldPositions[x].push(randomTiles[x * this._grid.size.y + y].position);
             }
         }
         

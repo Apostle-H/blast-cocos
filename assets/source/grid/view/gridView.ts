@@ -1,9 +1,9 @@
-﻿import {_decorator, Component, Node, Layout, Vec2, Vec3, Tween, UITransform, Size, Prefab, instantiate, EventTarget, tween} from "cc";
+﻿import {_decorator, Component, Layout, Vec2, UITransform, Size} from "cc";
 import {Pool} from "db://assets/utils/pool";
 import {TileView} from "db://assets/source/grid/view/tileView";
 import {TileSlotView} from "db://assets/source/grid/view/tileSlotView";
 import {Grid} from "db://assets/source/grid/grid";
-const {ccclass, property, requireComponent} = _decorator;
+const {ccclass, requireComponent} = _decorator;
 
 
 @ccclass('grid-view')
@@ -68,10 +68,10 @@ export class GridView extends Component{
         this._layout.paddingBottom = padding.y;
 
         for (const column of this._grid.tiles) {
-            this._tileSlotViews.push([])
+            this._tileSlotViews.push([]);
             for (const tile of column) {
                 const tileView = this._tileViewsPool.get();
-                tileView.setTile(tile)
+                tileView.setTile(tile);
                 
                 const tileSlotView = this._tileSlotViewsPool.get();
                 this._layout.node.addChild(tileSlotView.node);

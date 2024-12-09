@@ -64,7 +64,6 @@ export class IdleStateResolver extends AStateResolver<CoreState> {
     }
     
     private toClear() {
-        console.log(this._clearBoostsSelector.hasBoostSelected);
         if (this._clearBoostsSelector.hasBoostSelected) {
             this._selector.select = this._clearBoostsSelector.boost.fromPoint.bind(this._clearBoostsSelector.boost);
         } else {
